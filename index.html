@@ -1,314 +1,724 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FixBook</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FixBook</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
 
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f7f6;
-      color: #17201b;
-    }
+body{
+  font-family:Arial,sans-serif;
+  background:#f5f7f6;
+  color:#17201b;
+}
 
-    .app {
-      max-width: 430px;
-      min-height: 100vh;
-      margin: auto;
-      background: white;
-    }
+.app{
+  max-width:430px;
+  min-height:100vh;
+  margin:auto;
+  background:#fff;
+}
 
-    .hero {
-      min-height: 55vh;
-      background: #0b3d2a;
-      color: white;
-      padding: 70px 25px 40px;
-      border-radius: 0 0 40px 40px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-    }
+.screen{
+  display:none;
+  min-height:100vh;
+  padding:22px 20px;
+}
 
-    .logo {
-      font-size: 42px;
-      font-weight: bold;
-      margin-bottom: 15px;
-    }
+.screen.active{display:block}
 
-    .logo span {
-      color: #43c978;
-    }
+.hero{
+  min-height:48vh;
+  background:#0b3d2a;
+  color:#fff;
+  padding:55px 22px 35px;
+  border-radius:0 0 40px 40px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
 
-    .tagline {
-      font-size: 18px;
-      line-height: 1.6;
-      opacity: .9;
-      margin-bottom: 30px;
-    }
+.logo{
+  font-size:42px;
+  font-weight:bold;
+  margin-bottom:15px;
+}
 
-    .content {
-      padding: 30px 22px;
-      text-align: center;
-    }
+.logo span{color:#43c978}
 
-    h2 {
-      font-size: 25px;
-      margin-bottom: 8px;
-    }
+.tagline{
+  font-size:17px;
+  line-height:1.6;
+  opacity:.92;
+}
 
-    .subtitle {
-      color: #777;
-      margin-bottom: 25px;
-    }
+.content{
+  text-align:center;
+  padding:28px 20px;
+}
 
-    button {
-      width: 100%;
-      padding: 17px;
-      margin: 8px 0;
-      border-radius: 14px;
-      border: 1px solid #ddd;
-      background: white;
-      font-size: 17px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+h2{
+  font-size:24px;
+  margin-bottom:7px;
+}
 
-    button.primary {
-      background: #0b3d2a;
-      color: white;
-      border: none;
-    }
+.subtitle{
+  color:#777;
+  margin-bottom:20px;
+}
 
-    button:hover {
-      transform: scale(1.01);
-    }
+button{
+  width:100%;
+  padding:15px;
+  margin:7px 0;
+  border-radius:13px;
+  border:1px solid #ddd;
+  background:#fff;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
 
-    .screen {
-      display: none;
-      padding: 25px 20px;
-      min-height: 100vh;
-    }
+button.primary{
+  background:#0b3d2a;
+  color:#fff;
+  border:none;
+}
 
-    .screen.active {
-      display: block;
-    }
+.top{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:22px;
+}
 
-    .top {
-      display: flex;
-      align-items: center;
-      margin-bottom: 25px;
-    }
+.top h2{margin:0}
 
-    .back {
-      width: auto;
-      padding: 8px 14px;
-      margin-right: 15px;
-    }
+.back{
+  width:auto;
+  padding:8px 13px;
+  margin:0;
+}
 
-    .service {
-      padding: 18px;
-      border: 1px solid #ddd;
-      border-radius: 16px;
-      margin: 10px 0;
-      display: flex;
-      justify-content: space-between;
-    }
+.card{
+  padding:16px;
+  border:1px solid #ddd;
+  border-radius:15px;
+  margin:10px 0;
+  background:#fff;
+}
 
-    .price {
-      color: #0b3d2a;
-      font-weight: bold;
-    }
+.card.selected{
+  border:2px solid #0b3d2a;
+  background:#f1faf5;
+}
 
-    input {
-      width: 100%;
-      padding: 16px;
-      margin: 8px 0;
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      font-size: 16px;
-    }
+.row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:center;
+}
 
-    .success {
-      text-align: center;
-      padding-top: 100px;
-    }
+.price{
+  color:#0b3d2a;
+  font-weight:bold;
+  white-space:nowrap;
+}
 
-    .check {
-      font-size: 70px;
-      margin-bottom: 20px;
-    }
-  </style>
+.muted{
+  color:#777;
+  font-size:13px;
+  margin-top:5px;
+}
+
+input{
+  width:100%;
+  padding:15px;
+  margin:7px 0 13px;
+  border:1px solid #ddd;
+  border-radius:11px;
+  font-size:16px;
+}
+
+label{
+  display:block;
+  font-weight:bold;
+  margin-top:8px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin:10px 0 20px;
+}
+
+.grid button{
+  margin:0;
+  padding:13px 5px;
+}
+
+.grid button.selected{
+  background:#0b3d2a;
+  color:#fff;
+  border-color:#0b3d2a;
+}
+
+.summary{
+  background:#f4f7f5;
+  border-radius:15px;
+  padding:15px;
+  margin:12px 0;
+}
+
+.summary p{
+  padding:7px 0;
+  border-bottom:1px solid #ddd;
+}
+
+.summary p:last-child{border:0}
+
+.success{
+  text-align:center;
+  padding-top:80px;
+}
+
+.check{
+  font-size:70px;
+  margin-bottom:20px;
+}
+
+.empty{
+  text-align:center;
+  color:#777;
+  padding:50px 15px;
+}
+</style>
 </head>
 
 <body>
 
 <div class="app">
 
-  <!-- LANGUAGE SCREEN -->
-  <section id="language" class="screen active">
-    <div class="hero">
-      <div class="logo">Fix<span>Book</span></div>
+<!-- LANGUAGE -->
+<section id="language" class="screen active">
 
-      <div class="tagline">
-        احجز خدمة سيارتك بسهولة<br>
-        Book your car service easily<br>
-        Réservez votre service automobile facilement
-      </div>
-    </div>
+<div class="hero">
+<div class="logo">Fix<span>Book</span></div>
 
-    <div class="content">
-      <h2>Choose Language</h2>
-      <p class="subtitle">اختر اللغة • Choisissez votre langue</p>
+<div class="tagline">
+احجز خدمة سيارتك بسهولة<br>
+Book your car service easily<br>
+Réservez votre service automobile facilement
+</div>
+</div>
 
-      <button class="primary" onclick="setLanguage('ar')">
-        🇩🇿 العربية
-      </button>
+<div class="content">
 
-      <button onclick="setLanguage('en')">
-        🇬🇧 English
-      </button>
+<h2>Choose Language</h2>
 
-      <button onclick="setLanguage('fr')">
-        🇫🇷 Français
-      </button>
-    </div>
-  </section>
+<p class="subtitle">
+اختر اللغة • Choisissez votre langue
+</p>
 
+<button class="primary" onclick="setLanguage('ar')">
+🇩🇿 العربية
+</button>
 
-  <!-- HOME -->
-  <section id="home" class="screen">
-    <div class="top">
-      <h2 id="homeTitle">FixBook</h2>
-    </div>
+<button onclick="setLanguage('en')">
+🇬🇧 English
+</button>
 
-    <div class="content">
-      <h2 id="welcome">Welcome 👋</h2>
-      <p class="subtitle" id="homeSubtitle">
-        Book your car service quickly and easily.
-      </p>
+<button onclick="setLanguage('fr')">
+🇫🇷 Français
+</button>
 
-      <button class="primary" onclick="showScreen('services')">
-        🔧 <span id="bookButton">Book a Service</span>
-      </button>
-
-      <button onclick="showScreen('bookings')">
-        📋 <span id="myBookings">My Bookings</span>
-      </button>
-    </div>
-  </section>
+</div>
+</section>
 
 
-  <!-- SERVICES -->
-  <section id="services" class="screen">
+<!-- HOME -->
+<section id="home" class="screen">
 
-    <div class="top">
-      <button class="back" onclick="showScreen('home')">←</button>
-      <h2 id="servicesTitle">Services</h2>
-    </div>
+<div class="top">
+<h2>FixBook</h2>
+</div>
 
-    <div class="service">
-      <span>🔧 <b>General Service</b></span>
-      <span class="price">3000 DA</span>
-    </div>
+<div class="content">
 
-    <div class="service">
-      <span>🛢️ <b>Oil Change</b></span>
-      <span class="price">1500 DA</span>
-    </div>
+<h2 id="welcome">Welcome 👋</h2>
 
-    <div class="service">
-      <span>🔋 <b>Battery</b></span>
-      <span class="price">2500 DA</span>
-    </div>
+<p class="subtitle" id="homeSubtitle">
+Book your car service quickly and easily.
+</p>
 
-    <div class="service">
-      <span>🛞 <b>Tires</b></span>
-      <span class="price">2000 DA</span>
-    </div>
+<button class="primary" onclick="showScreen('services')">
+🔧 <span id="bookButton">Book a Service</span>
+</button>
 
-    <button class="primary" onclick="showScreen('booking')">
-      <span id="nextButton">Next</span> →
-    </button>
+<button onclick="showBookings()">
+📋 <span id="myBookings">My Bookings</span>
+</button>
 
-  </section>
+</div>
+</section>
 
 
-  <!-- BOOKING -->
-  <section id="booking" class="screen">
+<!-- SERVICES -->
+<section id="services" class="screen">
 
-    <div class="top">
-      <button class="back" onclick="showScreen('services')">←</button>
-      <h2 id="bookingTitle">Booking</h2>
-    </div>
+<div class="top">
 
-    <h3>📅 Date</h3>
-    <input type="date" id="date">
+<button class="back" onclick="showScreen('home')">
+←
+</button>
 
-    <h3>🕐 Time</h3>
-    <input type="time" id="time">
+<h2 id="servicesTitle">
+Services
+</h2>
 
-    <h3>👤 Your name</h3>
-    <input type="text" id="name" placeholder="Full name">
-
-    <h3>📞 Phone</h3>
-    <input type="tel" id="phone" placeholder="Phone number">
-
-    <button class="primary" onclick="confirmBooking()">
-      ✅ Confirm Booking
-    </button>
-
-  </section>
+</div>
 
 
-  <!-- SUCCESS -->
-  <section id="success" class="screen">
+<div class="card"
+onclick="selectService('General Service',3000,this)">
 
-    <div class="success">
+<div class="row">
+<span>🔧 <b>General Service</b></span>
+<span class="price">3000 DA</span>
+</div>
 
-      <div class="check">✅</div>
+<div class="muted">
+Full vehicle inspection
+</div>
 
-      <h2 id="successTitle">
-        Booking Successful!
-      </h2>
-
-      <p class="subtitle">
-        Your appointment has been confirmed.
-      </p>
-
-      <button class="primary" onclick="showScreen('home')">
-        ← Back to Home
-      </button>
-
-    </div>
-
-  </section>
+</div>
 
 
-  <!-- BOOKINGS -->
-  <section id="bookings" class="screen">
+<div class="card"
+onclick="selectService('Oil Change',1500,this)">
 
-    <div class="top">
-      <button class="back" onclick="showScreen('home')">←</button>
-      <h2>My Bookings</h2>
-    </div>
+<div class="row">
+<span>🛢️ <b>Oil Change</b></span>
+<span class="price">1500 DA</span>
+</div>
 
-    <div class="service">
-      <div>
-        🔧 <b>General Service</b><br>
-        <small id="bookingInfo">No bookings yet</small>
-      </div>
-    </div>
+<div class="muted">
+Oil and filter replacement
+</div>
 
-  </section>
+</div>
+
+
+<div class="card"
+onclick="selectService('Battery',2500,this)">
+
+<div class="row">
+<span>🔋 <b>Battery</b></span>
+<span class="price">2500 DA</span>
+</div>
+
+<div class="muted">
+Battery check and replacement
+</div>
+
+</div>
+
+
+<div class="card"
+onclick="selectService('Tires',2000,this)">
+
+<div class="row">
+<span>🛞 <b>Tires</b></span>
+<span class="price">2000 DA</span>
+</div>
+
+<div class="muted">
+Tire service
+</div>
+
+</div>
+
+
+<button class="primary" onclick="goGarages()">
+Next →
+</button>
+
+</section>
+
+
+<!-- GARAGES -->
+<section id="garages" class="screen">
+
+<div class="top">
+
+<button class="back"
+onclick="showScreen('services')">
+←
+</button>
+
+<h2>Garages</h2>
+
+</div>
+
+
+<input
+id="garageSearch"
+type="search"
+placeholder="🔍 Search garage"
+oninput="filterGarages()"
+>
+
+
+<div id="garageList">
+
+
+<div class="card garage"
+onclick="selectGarage('Al Saada Garage','4.8','1.2 km',this)">
+
+<div class="row">
+<span>🏪 <b>Al Saada Garage</b></span>
+<span>⭐ 4.8</span>
+</div>
+
+<div class="muted">
+Guelma • 1.2 km
+</div>
+
+</div>
+
+
+<div class="card garage"
+onclick="selectGarage('Pro Mechanic','4.6','2.3 km',this)">
+
+<div class="row">
+<span>🔧 <b>Pro Mechanic</b></span>
+<span>⭐ 4.6</span>
+</div>
+
+<div class="muted">
+Guelma • 2.3 km
+</div>
+
+</div>
+
+
+<div class="card garage"
+onclick="selectGarage('Auto Service','4.7','3.1 km',this)">
+
+<div class="row">
+<span>🚗 <b>Auto Service</b></span>
+<span>⭐ 4.7</span>
+</div>
+
+<div class="muted">
+Guelma • 3.1 km
+</div>
+
+</div>
+
+
+<div class="card garage"
+onclick="selectGarage('Elite Garage','4.5','4.0 km',this)">
+
+<div class="row">
+<span>🏁 <b>Elite Garage</b></span>
+<span>⭐ 4.5</span>
+</div>
+
+<div class="muted">
+Guelma • 4.0 km
+</div>
+
+</div>
+
+</div>
+
+
+<button class="primary"
+onclick="goDateTime()">
+Next →
+</button>
+
+</section>
+
+
+<!-- DATE & TIME -->
+<section id="datetime" class="screen">
+
+<div class="top">
+
+<button class="back"
+onclick="showScreen('garages')">
+←
+</button>
+
+<h2>Choose Date & Time</h2>
+
+</div>
+
+
+<label>Date</label>
+
+<input
+type="date"
+id="date"
+>
+
+
+<label>Time</label>
+
+
+<div class="grid"
+id="timeGrid">
+
+<button onclick="selectTime('09:00',this)">
+09:00
+</button>
+
+<button onclick="selectTime('10:00',this)">
+10:00
+</button>
+
+<button onclick="selectTime('11:00',this)">
+11:00
+</button>
+
+<button onclick="selectTime('12:00',this)">
+12:00
+</button>
+
+<button onclick="selectTime('13:00',this)">
+13:00
+</button>
+
+<button onclick="selectTime('14:00',this)">
+14:00
+</button>
+
+<button onclick="selectTime('15:00',this)">
+15:00
+</button>
+
+<button onclick="selectTime('16:00',this)">
+16:00
+</button>
+
+<button onclick="selectTime('17:00',this)">
+17:00
+</button>
+
+</div>
+
+
+<button class="primary"
+onclick="goCustomer()">
+
+Next →
+
+</button>
+
+</section>
+
+
+<!-- CUSTOMER DETAILS -->
+<section id="customer" class="screen">
+
+<div class="top">
+
+<button class="back"
+onclick="showScreen('datetime')">
+←
+</button>
+
+<h2>Customer Details</h2>
+
+</div>
+
+
+<label>Full name</label>
+
+<input
+id="name"
+placeholder="Full name"
+>
+
+
+<label>Phone number</label>
+
+<input
+id="phone"
+type="tel"
+placeholder="Phone number"
+>
+
+
+<label>Car / Vehicle</label>
+
+<input
+id="car"
+placeholder="Example: Renault Kangoo"
+>
+
+
+<label>License plate</label>
+
+<input
+id="plate"
+placeholder="Example: 12345 104 24"
+>
+
+
+<label>Location</label>
+
+<input
+id="location"
+placeholder="City / Location"
+>
+
+
+<button class="primary"
+onclick="goConfirm()">
+
+Next →
+
+</button>
+
+</section>
+
+
+<!-- CONFIRM -->
+<section id="confirm" class="screen">
+
+<div class="top">
+
+<button class="back"
+onclick="showScreen('customer')">
+←
+</button>
+
+<h2>Confirm Booking</h2>
+
+</div>
+
+
+<div class="summary"
+id="summary">
+</div>
+
+
+<button class="primary"
+onclick="confirmBooking()">
+
+✅ Confirm Booking
+
+</button>
+
+</section>
+
+
+<!-- SUCCESS -->
+<section id="success" class="screen">
+
+<div class="success">
+
+<div class="check">
+✅
+</div>
+
+<h2>
+Booking Successful!
+</h2>
+
+<p class="subtitle">
+Your appointment has been confirmed.
+</p>
+
+
+<div class="summary">
+
+<b>Booking Number</b>
+
+<br>
+
+<span id="bookingNumber"></span>
+
+</div>
+
+
+<button class="primary"
+onclick="showBookings()">
+
+📋 My Bookings
+
+</button>
+
+
+<button onclick="showScreen('home')">
+
+← Back to Home
+
+</button>
+
+</div>
+
+</section>
+
+
+<!-- MY BOOKINGS -->
+<section id="bookings" class="screen">
+
+<div class="top">
+
+<button class="back"
+onclick="showScreen('home')">
+←
+</button>
+
+<h2>My Bookings</h2>
+
+</div>
+
+
+<div id="bookingList">
+</div>
+
+</section>
+
+
+<!-- BOOKING DETAILS -->
+<section id="details" class="screen">
+
+<div class="top">
+
+<button class="back"
+onclick="showBookings()">
+←
+</button>
+
+<h2>Booking Details</h2>
+
+</div>
+
+
+<div class="summary"
+id="detailsSummary">
+</div>
+
+
+<button onclick="showBookings()">
+
+← Back to My Bookings
+
+</button>
+
+</section>
+
 
 </div>
 
@@ -317,100 +727,476 @@
 
 let language = "en";
 
-function showScreen(id) {
 
-  document.querySelectorAll(".screen").forEach(screen => {
-    screen.classList.remove("active");
-  });
+let data = {
 
-  document.getElementById(id).classList.add("active");
+service:"",
+price:0,
+
+garage:"",
+rating:"",
+distance:"",
+
+date:"",
+time:"",
+
+name:"",
+phone:"",
+car:"",
+plate:"",
+location:"",
+
+number:""
+
+};
+
+
+let bookings = [];
+
+
+function showScreen(id){
+
+document
+.querySelectorAll(".screen")
+.forEach(screen =>
+screen.classList.remove("active")
+);
+
+document
+.getElementById(id)
+.classList.add("active");
+
+window.scrollTo(0,0);
+
 }
 
-function setLanguage(lang) {
 
-  language = lang;
+function setLanguage(lang){
 
-  if (lang === "ar") {
+language = lang;
 
-    document.documentElement.dir = "rtl";
+document.documentElement.dir =
+lang === "ar" ? "rtl" : "ltr";
 
-    document.getElementById("welcome").innerText = "مرحباً 👋";
-    document.getElementById("homeSubtitle").innerText =
-      "احجز خدمة سيارتك بسرعة وسهولة";
-    document.getElementById("bookButton").innerText =
-      "احجز خدمة";
-    document.getElementById("myBookings").innerText =
-      "حجوزاتي";
-    document.getElementById("servicesTitle").innerText =
-      "الخدمات";
-    document.getElementById("bookingTitle").innerText =
-      "الحجز";
-    document.getElementById("nextButton").innerText =
-      "التالي";
-    document.getElementById("successTitle").innerText =
-      "تم الحجز بنجاح!";
 
-  } else if (lang === "fr") {
+const translations = {
 
-    document.documentElement.dir = "ltr";
+ar:[
+"مرحباً 👋",
+"احجز خدمة سيارتك بسرعة وسهولة",
+"احجز خدمة",
+"حجوزاتي",
+"الخدمات"
+],
 
-    document.getElementById("welcome").innerText =
-      "Bienvenue 👋";
-    document.getElementById("homeSubtitle").innerText =
-      "Réservez votre service automobile rapidement.";
-    document.getElementById("bookButton").innerText =
-      "Réserver un service";
-    document.getElementById("myBookings").innerText =
-      "Mes réservations";
-    document.getElementById("servicesTitle").innerText =
-      "Services";
-    document.getElementById("bookingTitle").innerText =
-      "Réservation";
-    document.getElementById("nextButton").innerText =
-      "Suivant";
-    document.getElementById("successTitle").innerText =
-      "Réservation réussie !";
+en:[
+"Welcome 👋",
+"Book your car service quickly and easily.",
+"Book a Service",
+"My Bookings",
+"Services"
+],
 
-  } else {
+fr:[
+"Bienvenue 👋",
+"Réservez votre service automobile rapidement.",
+"Réserver un service",
+"Mes réservations",
+"Services"
+]
 
-    document.documentElement.dir = "ltr";
+};
 
-    document.getElementById("welcome").innerText =
-      "Welcome 👋";
-    document.getElementById("homeSubtitle").innerText =
-      "Book your car service quickly and easily.";
-    document.getElementById("bookButton").innerText =
-      "Book a Service";
-    document.getElementById("myBookings").innerText =
-      "My Bookings";
-    document.getElementById("servicesTitle").innerText =
-      "Services";
-    document.getElementById("bookingTitle").innerText =
-      "Booking";
-    document.getElementById("nextButton").innerText =
-      "Next";
-    document.getElementById("successTitle").innerText =
-      "Booking Successful!";
-  }
 
-  showScreen("home");
+const t = translations[lang];
+
+
+document.getElementById("welcome").innerText = t[0];
+
+document.getElementById("homeSubtitle").innerText = t[1];
+
+document.getElementById("bookButton").innerText = t[2];
+
+document.getElementById("myBookings").innerText = t[3];
+
+document.getElementById("servicesTitle").innerText = t[4];
+
+
+showScreen("home");
+
 }
 
-function confirmBooking() {
 
-  const date = document.getElementById("date").value;
-  const time = document.getElementById("time").value;
-  const name = document.getElementById("name").value;
+function selectService(name,price,element){
 
-  if (!date || !time || !name) {
-    alert("Please complete all information.");
-    return;
-  }
+data.service = name;
 
-  document.getElementById("bookingInfo").innerText =
-    name + " • " + date + " • " + time;
+data.price = price;
 
-  showScreen("success");
+
+document
+.querySelectorAll("#services .card")
+.forEach(x =>
+x.classList.remove("selected")
+);
+
+
+element.classList.add("selected");
+
+}
+
+
+function goGarages(){
+
+if(!data.service){
+
+alert("Please choose a service first.");
+
+return;
+
+}
+
+showScreen("garages");
+
+}
+
+
+function selectGarage(name,rating,distance,element){
+
+data.garage = name;
+
+data.rating = rating;
+
+data.distance = distance;
+
+
+document
+.querySelectorAll(".garage")
+.forEach(x =>
+x.classList.remove("selected")
+);
+
+
+element.classList.add("selected");
+
+}
+
+
+function filterGarages(){
+
+const search =
+document
+.getElementById("garageSearch")
+.value
+.toLowerCase();
+
+
+document
+.querySelectorAll(".garage")
+.forEach(garage => {
+
+garage.style.display =
+garage.innerText
+.toLowerCase()
+.includes(search)
+? "block"
+: "none";
+
+});
+
+}
+
+
+function goDateTime(){
+
+if(!data.garage){
+
+alert("Please choose a garage first.");
+
+return;
+
+}
+
+showScreen("datetime");
+
+}
+
+
+function selectTime(time,element){
+
+data.time = time;
+
+
+document
+.querySelectorAll("#timeGrid button")
+.forEach(x =>
+x.classList.remove("selected")
+);
+
+
+element.classList.add("selected");
+
+}
+
+
+function goCustomer(){
+
+data.date =
+document.getElementById("date").value;
+
+
+if(!data.date || !data.time){
+
+alert("Please choose a date and time.");
+
+return;
+
+}
+
+
+showScreen("customer");
+
+}
+
+
+function goConfirm(){
+
+data.name =
+document.getElementById("name").value.trim();
+
+data.phone =
+document.getElementById("phone").value.trim();
+
+data.car =
+document.getElementById("car").value.trim();
+
+data.plate =
+document.getElementById("plate").value.trim();
+
+data.location =
+document.getElementById("location").value.trim();
+
+
+if(
+!data.name ||
+!data.phone ||
+!data.car ||
+!data.plate ||
+!data.location
+){
+
+alert("Please complete all customer information.");
+
+return;
+
+}
+
+
+document.getElementById("summary").innerHTML =
+summaryHTML(data);
+
+
+showScreen("confirm");
+
+}
+
+
+function summaryHTML(b){
+
+return `
+
+<p>
+🏪 <b>Garage:</b>
+${b.garage}
+</p>
+
+<p>
+🔧 <b>Service:</b>
+${b.service}
+</p>
+
+<p>
+📅 <b>Date:</b>
+${b.date}
+</p>
+
+<p>
+🕐 <b>Time:</b>
+${b.time}
+</p>
+
+<p>
+👤 <b>Name:</b>
+${b.name}
+</p>
+
+<p>
+📞 <b>Phone:</b>
+${b.phone}
+</p>
+
+<p>
+🚗 <b>Vehicle:</b>
+${b.car}
+</p>
+
+<p>
+🔢 <b>Plate:</b>
+${b.plate}
+</p>
+
+<p>
+💰 <b>Total:</b>
+${b.price} DA
+</p>
+
+`;
+
+}
+
+
+function confirmBooking(){
+
+data.number =
+"#FB" +
+Date.now()
+.toString()
+.slice(-10);
+
+
+const saved =
+JSON.parse(JSON.stringify(data));
+
+
+bookings.push(saved);
+
+
+document
+.getElementById("bookingNumber")
+.innerText =
+saved.number;
+
+
+showScreen("success");
+
+}
+
+
+function showBookings(){
+
+const box =
+document.getElementById("bookingList");
+
+
+if(!bookings.length){
+
+box.innerHTML = `
+
+<div class="empty">
+
+No bookings yet.<br>
+
+Book your first car service.
+
+</div>
+
+`;
+
+showScreen("bookings");
+
+return;
+
+}
+
+
+box.innerHTML =
+bookings.map((b,i)=>`
+
+<div
+class="card"
+onclick="showDetails(${i})"
+>
+
+<div class="row">
+
+<span>
+<b>${b.service}</b>
+</span>
+
+<span>
+✓ Confirmed
+</span>
+
+</div>
+
+
+<div class="muted">
+
+${b.garage}
+•
+${b.date}
+•
+${b.time}
+
+</div>
+
+
+<div class="muted">
+
+${b.price} DA
+
+</div>
+
+</div>
+
+`).join("");
+
+
+showScreen("bookings");
+
+}
+
+
+function showDetails(i){
+
+const b = bookings[i];
+
+
+document
+.getElementById("detailsSummary")
+.innerHTML =
+
+summaryHTML(b)
+
++
+
+`
+
+<p>
+🟢 <b>Status:</b>
+Confirmed
+</p>
+
+<p>
+⭐ <b>Garage rating:</b>
+${b.rating}
+</p>
+
+<p>
+📍 <b>Distance:</b>
+${b.distance}
+</p>
+
+<p>
+🎫 <b>Booking number:</b>
+${b.number}
+</p>
+
+`;
+
+
+showScreen("details");
+
 }
 
 </script>
