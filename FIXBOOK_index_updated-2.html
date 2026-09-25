@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FixBook</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f5f7f6;color:#17201b}
+.app{max-width:430px;min-height:100vh;margin:auto;background:#fff}
+.screen{display:none;min-height:100vh;padding:22px 20px}
+.screen.active{display:block}
+.hero{min-height:48vh;background:#0b3d2a;color:#fff;padding:55px 22px 35px;border-radius:0 0 40px 40px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.logo{font-size:42px;font-weight:bold;margin-bottom:15px}.logo span{color:#43c978}
+.tagline{font-size:17px;line-height:1.6;opacity:.92}
+.content{text-align:center;padding:28px 20px}
+h2{font-size:24px;margin-bottom:7px}.subtitle{color:#777;margin-bottom:20px}
+button{width:100%;padding:15px;margin:7px 0;border-radius:13px;border:1px solid #ddd;background:#fff;font-size:16px;font-weight:bold;cursor:pointer}
+button.primary{background:#0b3d2a;color:#fff;border:none}
+.top{display:flex;align-items:center;gap:12px;margin-bottom:22px}.top h2{margin:0}
+.back{width:auto;padding:8px 13px;margin:0}
+.card{padding:16px;border:1px solid #ddd;border-radius:15px;margin:10px 0;background:#fff}
+.card.selected{border:2px solid #0b3d2a;background:#f1faf5}
+.row{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.price{color:#0b3d2a;font-weight:bold;white-space:nowrap}
+.muted{color:#777;font-size:13px;margin-top:5px}
+input{width:100%;padding:15px;margin:7px 0 13px;border:1px solid #ddd;border-radius:11px;font-size:16px}
+label{display:block;font-weight:bold;margin-top:8px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0 20px}
+.grid button{margin:0;padding:13px 5px}
+.grid button.selected{background:#0b3d2a;color:#fff;border-color:#0b3d2a}
+.summary{background:#f4f7f5;border-radius:15px;padding:15px;margin:12px 0}
+.summary p{padding:7px 0;border-bottom:1px solid #ddd}.summary p:last-child{border:0}
+.success{text-align:center;padding-top:80px}.check{font-size:70px;margin-bottom:20px}
+.small-btn{width:auto;padding:8px 12px;font-size:13px}
+.empty{text-align:center;color:#777;padding:50px 15px}
+</style>
+</head>
+<body>
+<div class="app">
+
+<section id="language" class="screen active">
+  <div class="hero">
+    <div class="logo">Fix<span>Book</span></div>
+    <div class="tagline">احجز خدمة سيارتك بسهولة<br>Book your car service easily<br>Réservez votre service automobile facilement</div>
+  </div>
+  <div class="content">
+    <h2>Choose Language</h2><p class="subtitle">اختر اللغة • Choisissez votre langue</p>
+    <button class="primary" onclick="setLanguage('ar')">🇩🇿 العربية</button>
+    <button onclick="setLanguage('en')">🇬🇧 English</button>
+    <button onclick="setLanguage('fr')">🇫🇷 Français</button>
+  </div>
+</section>
+
+<section id="home" class="screen">
+  <div class="top"><h2>FixBook</h2></div>
+  <div class="content">
+    <h2 id="welcome">Welcome 👋</h2>
+    <p class="subtitle" id="homeSubtitle">Book your car service quickly and easily.</p>
+    <button class="primary" onclick="showScreen('services')">🔧 <span id="bookButton">Book a Service</span></button>
+    <button onclick="showBookings()">📋 <span id="myBookings">My Bookings</span></button>
+  </div>
+</section>
+
+<section id="services" class="screen">
+  <div class="top"><button class="back" onclick="showScreen('home')">←</button><h2 id="servicesTitle">Services</h2></div>
+  <div class="card" onclick="selectService('General Service',3000,this)"><div class="row"><span>🔧 <b>General Service</b></span><span class="price">3000 DA</span></div><div class="muted">Full vehicle inspection</div></div>
+  <div class="card" onclick="selectService('Oil Change',1500,this)"><div class="row"><span>🛢️ <b>Oil Change</b></span><span class="price">1500 DA</span></div><div class="muted">Oil and filter replacement</div></div>
+  <div class="card" onclick="selectService('Battery',2500,this)"><div class="row"><span>🔋 <b>Battery</b></span><span class="price">2500 DA</span></div><div class="muted">Battery check and replacement</div></div>
+  <div class="card" onclick="selectService('Tires',2000,this)"><div class="row"><span>🛞 <b>Tires</b></span><span class="price">2000 DA</span></div><div class="muted">Tire service</div></div>
+  <button class="primary" onclick="goGarages()">Next →</button>
+</section>
+
+<section id="garages" class="screen">
+  <div class="top"><button class="back" onclick="showScreen('services')">←</button><h2>Garages</h2></div>
+  <input id="garageSearch" type="search" placeholder="🔍 Search garage" oninput="filterGarages()">
+  <div id="garageList">
+    <div class="card garage" onclick="selectGarage('Al Saada Garage','4.8', '1.2 km',this)">
+      <div class="row"><span>🏪 <b>Al Saada Garage</b></span><span>⭐ 4.8</span></div><div class="muted">Guelma • 1.2 km</div>
+    </div>
+    <div class="card garage" onclick="selectGarage('Pro Mechanic','4.6','2.3 km',this)">
+      <div class="row"><span>🔧 <b>Pro Mechanic</b></span><span>⭐ 4.6</span></div><div class="muted">Guelma • 2.3 km</div>
+    </div>
+    <div class="card garage" onclick="selectGarage('Auto Service','4.7','3.1 km',this)">
+      <div class="row"><span>🚗 <b>Auto Service</b></span><span>⭐ 4.7</span></div><div class="muted">Guelma • 3.1 km</div>
+    </div>
+    <div class="card garage" onclick="selectGarage('Elite Garage','4.5','4.0 km',this)">
+      <div class="row"><span>🏁 <b>Elite Garage</b></span><span>⭐ 4.5</span></div><div class="muted">Guelma • 4.0 km</div>
+    </div>
+  </div>
+  <button class="primary" onclick="goDateTime()">Next →</button>
+</section>
+
+<section id="datetime" class="screen">
+  <div class="top"><button class="back" onclick="showScreen('garages')">←</button><h2>Choose Date & Time</h2></div>
+  <label>Date</label><input type="date" id="date">
+  <label>Time</label>
+  <div class="grid" id="timeGrid">
+    <button onclick="selectTime('09:00',this)">09:00</button><button onclick="selectTime('10:00',this)">10:00</button><button onclick="selectTime('11:00',this)">11:00</button>
+    <button onclick="selectTime('12:00',this)">12:00</button><button onclick="selectTime('13:00',this)">13:00</button><button onclick="selectTime('14:00',this)">14:00</button>
+    <button onclick="selectTime('15:00',this)">15:00</button><button onclick="selectTime('16:00',this)">16:00</button><button onclick="selectTime('17:00',this)">17:00</button>
+  </div>
+  <button class="primary" onclick="goCustomer()">Next →</button>
+</section>
+
+<section id="customer" class="screen">
+  <div class="top"><button class="back" onclick="showScreen('datetime')">←</button><h2>Customer Details</h2></div>
+  <label>Full name</label><input id="name" placeholder="Full name">
+  <label>Phone number</label><input id="phone" type="tel" placeholder="Phone number">
+  <label>Car / Vehicle</label><input id="car" placeholder="Example: Renault Kangoo">
+  <label>License plate</label><input id="plate" placeholder="Example: 12345 104 24">
+  <label>Location</label><input id="location" placeholder="City / Location">
+  <button class="primary" onclick="goConfirm()">Next →</button>
+</section>
+
+<section id="confirm" class="screen">
+  <div class="top"><button class="back" onclick="showScreen('customer')">←</button><h2>Confirm Booking</h2></div>
+  <div class="summary" id="summary"></div>
+  <button class="primary" onclick="confirmBooking()">✅ Confirm Booking</button>
+</section>
+
+<section id="success" class="screen">
+  <div class="success">
+    <div class="check">✅</div>
+    <h2>Booking Successful!</h2>
+    <p class="subtitle">Your appointment has been confirmed.</p>
+    <div class="summary"><b>Booking Number</b><br><span id="bookingNumber"></span></div>
+    <button class="primary" onclick="showBookings()">📋 My Bookings</button>
+    <button onclick="showScreen('home')">← Back to Home</button>
+  </div>
+</section>
+
+<section id="bookings" class="screen">
+  <div class="top"><button class="back" onclick="showScreen('home')">←</button><h2>My Bookings</h2></div>
+  <div id="bookingList"></div>
+</section>
+
+<section id="details" class="screen">
+  <div class="top"><button class="back" onclick="showBookings()">←</button><h2>Booking Details</h2></div>
+  <div class="summary" id="detailsSummary"></div>
+  <button onclick="showBookings()">← Back to My Bookings</button>
+</section>
+
+</div>
+
+<script>
+let language="en";
+let data={service:"",price:0,garage:"",rating:"",distance:"",date:"",time:"",name:"",phone:"",car:"",plate:"",location:"",number:""};
+let bookings=[];
+
+function showScreen(id){
+ document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ window.scrollTo(0,0);
+}
+function setLanguage(lang){
+ language=lang;
+ document.documentElement.dir=lang==="ar"?"rtl":"ltr";
+ const t={
+  ar:["مرحباً 👋","احجز خدمة سيارتك بسرعة وسهولة","احجز خدمة","حجوزاتي","الخدمات"],
+  en:["Welcome 👋","Book your car service quickly and easily.","Book a Service","My Bookings","Services"],
+  fr:["Bienvenue 👋","Réservez votre service automobile rapidement.","Réserver un service","Mes réservations","Services"]
+ }[lang];
+ document.getElementById("welcome").innerText=t[0];
+ document.getElementById("homeSubtitle").innerText=t[1];
+ document.getElementById("bookButton").innerText=t[2];
+ document.getElementById("myBookings").innerText=t[3];
+ document.getElementById("servicesTitle").innerText=t[4];
+ showScreen("home");
+}
+function selectService(name,price,el){
+ data.service=name;data.price=price;
+ document.querySelectorAll("#services .card").forEach(x=>x.classList.remove("selected"));
+ el.classList.add("selected");
+}
+function goGarages(){
+ if(!data.service){alert("Please choose a service first.");return}
+ showScreen("garages");
+}
+function selectGarage(name,rating,distance,el){
+ data.garage=name;data.rating=rating;data.distance=distance;
+ document.querySelectorAll(".garage").forEach(x=>x.classList.remove("selected"));
+ el.classList.add("selected");
+}
+function filterGarages(){
+ const q=document.getElementById("garageSearch").value.toLowerCase();
+ document.querySelectorAll(".garage").forEach(g=>g.style.display=g.innerText.toLowerCase().includes(q)?"block":"none");
+}
+function goDateTime(){
+ if(!data.garage){alert("Please choose a garage first.");return}
+ showScreen("datetime");
+}
+function selectTime(time,el){
+ data.time=time;
+ document.querySelectorAll("#timeGrid button").forEach(x=>x.classList.remove("selected"));
+ el.classList.add("selected");
+}
+function goCustomer(){
+ data.date=document.getElementById("date").value;
+ if(!data.date||!data.time){alert("Please choose a date and time.");return}
+ showScreen("customer");
+}
+function goConfirm(){
+ data.name=document.getElementById("name").value.trim();
+ data.phone=document.getElementById("phone").value.trim();
+ data.car=document.getElementById("car").value.trim();
+ data.plate=document.getElementById("plate").value.trim();
+ data.location=document.getElementById("location").value.trim();
+ if(!data.name||!data.phone||!data.car||!data.plate||!data.location){alert("Please complete all customer information.");return}
+ document.getElementById("summary").innerHTML=summaryHTML(data);
+ showScreen("confirm");
+}
+function summaryHTML(b){
+ return `<p>🏪 <b>Garage:</b> ${b.garage}</p>
+ <p>🔧 <b>Service:</b> ${b.service}</p>
+ <p>📅 <b>Date:</b> ${b.date}</p>
+ <p>🕐 <b>Time:</b> ${b.time}</p>
+ <p>👤 <b>Name:</b> ${b.name}</p>
+ <p>📞 <b>Phone:</b> ${b.phone}</p>
+ <p>🚗 <b>Vehicle:</b> ${b.car}</p>
+ <p>🔢 <b>Plate:</b> ${b.plate}</p>
+ <p>💰 <b>Total:</b> ${b.price} DA</p>`;
+}
+function confirmBooking(){
+ data.number="#FB"+Date.now().toString().slice(-10);
+ const saved=JSON.parse(JSON.stringify(data));
+ bookings.push(saved);
+ document.getElementById("bookingNumber").innerText=saved.number;
+ showScreen("success");
+}
+function showBookings(){
+ const box=document.getElementById("bookingList");
+ if(!bookings.length){box.innerHTML='<div class="empty">No bookings yet.<br>Book your first car service.</div>';showScreen("bookings");return}
+ box.innerHTML=bookings.map((b,i)=>`<div class="card" onclick="showDetails(${i})">
+ <div class="row"><span><b>${b.service}</b></span><span>✓ Confirmed</span></div>
+ <div class="muted">${b.garage} • ${b.date} • ${b.time}</div>
+ <div class="muted">${b.price} DA</div>
+ </div>`).join("");
+ showScreen("bookings");
+}
+function showDetails(i){
+ const b=bookings[i];
+ document.getElementById("detailsSummary").innerHTML=summaryHTML(b)+`<p>🟢 <b>Status:</b> Confirmed</p><p>⭐ <b>Garage rating:</b> ${b.rating}</p><p>📍 <b>Distance:</b> ${b.distance}</p><p>🎫 <b>Booking number:</b> ${b.number}</p>`;
+ showScreen("details");
+}
+</script>
+</body>
+</html>
